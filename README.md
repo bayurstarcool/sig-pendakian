@@ -10,6 +10,6 @@ Teknik Informatika
 Universitas Negeri Surabaya
 
 Daftar Nama :
-1. Wahyu Prasetyo
-2. Martha Yogi Yuda Refendy
-3. Yanu Ade Safikri
+1. Wahyu Prasetyo (18051204076)
+2. Martha Yogi Yuda Rifendy (18051204016)
+3. Yanu Ade Safikri (18051204021)
