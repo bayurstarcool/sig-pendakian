@@ -1,0 +1,85 @@
+{{define "content"}}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+<div class="page-breadcrumb">
+    <div class="row align-items-center">
+        <div class="col-5">
+            <h4 class="page-title">Tracks of {{.mountain.Name}}</h4>
+            <div class="d-flex align-items-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Track</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <div class="col-7">
+            <div class="text-end upgrade-btn">
+                <a href="/mountains/{{.ID}}/tracks/create" class="btn btn-success text-white">Create Track</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Column -->
+        <div class="col-lg-12 col-xlg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    Peta
+                    <div id="mapid" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+    </div>
+
+</div>
+<script>
+    var lat = "{{.mountain.Lat}}";
+    var lng = "{{.mountain.Lng}}";
+	var mymap = L.map('mapid',).setView([lat,lng], 14);
+	// var Openstreet = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+	// 	maxZoom: 18,
+	// 	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+	// 		'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+	// 	id: 'mapbox/streets-v11',
+	// 	tileSize: 512,
+	// 	zoomOffset: -1
+	// });
+
+    var Esri_WorldImagery =
+     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom :18,
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+    id: 'mapbox/streets-v11',
+	tileSize: 512,
+	zoomOffset: -1
+    }).addTo(mymap);
+
+	var popup = L.popup();
+	function onMapClick(e) {
+        var lat = $("#lat").val(e.latlng.lat);
+        var lng = $("#lng").val(e.latlng.lng);
+		popup
+			.setLatLng(e.latlng)
+			.setContent("You clicked the map at " + e.latlng.toString())
+			.openOn(mymap);
+	}
+	mymap.on('click', onMapClick);
+    var data = {{.tracks}};
+    var tracks = Array();
+    data.forEach(track => {
+        tracks.push([track.Longitude, track.Latitude]);
+    });
+    L.polyline(tracks).addTo(mymap).bindPopup("I am a polygon.");
+    var trypol = [
+		[-8.01431, 112.945526],
+		[-8.107669, 112.922228]
+	];
+	L.polyline(trypol,{color:'red'}).addTo(mymap);
+</script>
+
+{{end}}

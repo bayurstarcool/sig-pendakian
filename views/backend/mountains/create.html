@@ -1,0 +1,95 @@
+{{define "content"}}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+<div class="page-breadcrumb">
+    <div class="row align-items-center">
+        <div class="col-5">
+            <h4 class="page-title">Create Mountain</h4>
+            <div class="d-flex align-items-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Mountains</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <div class="col-7">
+            <div class="text-end upgrade-btn">
+                <a href="/new/mountain" class="btn btn-danger text-white"
+                    target="_blank">Create</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Column -->
+        <div class="col-lg-4 col-xlg-4 col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <form action="/mountains" method="POST">
+                        <div class="form-group">
+                            <label class="col-md-12">Mountain Name</label>
+                            <div class="col-md-12">
+                                <input name="name" required type="text" placeholder="Mountain Name" class="form-control form-control-line">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="example-email" class="col-md-12">Latitude</label>
+                            <div class="col-md-12">
+                                <input type="text" id="lat" required name="lat" placeholder="Lat" class="form-control form-control-line">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="example-email" class="col-md-12">Longitude</label>
+                            <div class="col-md-12">
+                                <input type="text" id="lng" required name="lng" placeholder="Lng" class="form-control form-control-line">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <button type="submit" class="btn btn-success text-white">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-xlg-8 col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    Peta
+                    <div id="mapid" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+    </div>
+
+</div>
+<script>
+	var mymap = L.map('mapid').setView([-7.2, 112.5], 8);
+	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox/streets-v11',
+		tileSize: 512,
+		zoomOffset: -1
+	}).addTo(mymap);
+	    
+	var popup = L.popup();
+	function onMapClick(e) {
+        var lat = $("#lat").val(e.latlng.lat);
+        var lng = $("#lng").val(e.latlng.lng);
+		popup
+			.setLatLng(e.latlng)
+			.setContent("You clicked the map at " + e.latlng.toString())
+			.openOn(mymap);
+	}
+	mymap.on('click', onMapClick);
+</script>
+
+{{end}}
